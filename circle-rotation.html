@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Circle Rotation</title>
+
+        <!-- Bootstrap -->
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+            crossorigin="anonymous"
+        />
+
+        <!-- Fontawesome -->
+        <link
+            rel="stylesheet"
+            href="./fontawesome-(free-6.1.1-web)/css/all.css"
+        />
+
+
+        <style type="text/css">
+            body {
+                height: 1500vh;
+            }
+
+            .container-circle {
+                width: 100%;
+                height: 100vh;
+                position: fixed;
+                top: 0;
+                
+            }
+
+            .bigger-box {
+                background-color: #eee;
+                width: 100%;
+                height: 100vh;
+                margin: 10px;
+                border: 5px solid #000;
+                position: relative;
+                margin: 0px;
+            }
+
+            /* 用來將其定到中間  物件是繞著這個為圓心轉*/
+            /* 可以先不要管這個定位點怎麼來 */
+            .bigger-place-setter {
+                position: absolute;
+                left: 45%;
+                top: 40%;
+                /* 要怎麼確保圓心一定在正中央？ */
+            }
+
+            .item4 {
+                width: 150px;
+                height: 150px;
+                position: absolute;
+                /* 設定起始位置 */
+                left: 180px;
+                top: 0px;
+            }
+            .item5 {
+                width: 150px;
+                height: 150px;
+                position: absolute;
+                /* 設定起始位置 */
+                left: 0.51px;
+                top: 239.99px;
+            }
+
+            /* const maleWidthStr = maleWidth + '%' */
+            /* 這邊CSS的寬高用%表示的話，是因為下面script是用%數表示 */
+
+            .item5 img, .item4 img {
+                width: 100%;
+                /* height: 100%; */
+                outline: 1px solid blue;
+                /* object-fit: cover; */
+                /* object-position: center; */
+                /* 如何確保圖片一定會滿版大？ */
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <div class="container-circle">
+
+            <div class="row">
+
+                <!-- 黑色外框 -->
+                <div class="bigger-box">
+                    <!-- 旋轉中心點 -->
+                    <div class="bigger-place-setter" style="outline:10px solid red">
+                        <div class="item5" style="outline:1px solid green">
+                            <img src="./circle-rotation-img/wu.svg" alt="" />
+                        </div>
+                        <div class="item4" style="outline:1px solid green">
+                            <img src="./circle-rotation-img/flavour.svg" alt="" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <script src="./js/jquery-3.6.0.min.js"></script>
+        <script>
+            const renderBully = () => {
+                // let time = new Date().getMilliseconds();
+                // 如果開啟 .item {
+                //    top: -85px
+                // }
+                // 就會旋轉
+                // 1000 毫秒 = 360度 x 2.7777777778
+                // console.log(time/2.777777778);
+                // const rotateStr = 'rotate(' + time/2.777777778 + 'deg)';
+                // $('.item1').css('transform', rotateStr);
+                // 現在改成定位
+                // console.log(time);
+                // console.log(Math.cos(time));
+                // 轉太快了所以調整一下數值
+                // 一圈 360 度度 = 2PI 徑度
+                // time = time / (2 * Math.PI);
+                // console.log(time);
+                // const left = Math.cos(time) * 85 + 'px';
+                // const top = Math.sin(time) * 85/2 + 'px';
+                // $('.item1').css('left', left);
+                // $('.item1').css('top', top);
+                // 一直呼叫自己
+                // setTimeout(renderBully, 30);
+            };
+
+            // setTimeout(renderBully, 30);
+
+            // 把抽風時間版本改成捲動版本
+
+            $(window).on("scroll", (e) => {
+                const scroll = $(e.target).scrollTop();
+                // console.log(scroll);
+
+                // Mod for Modulo 餘數
+                // 我的 Mac 500vh 是 3132
+                // 這數字可以自行調整
+                const _100vh = 6164 / 2; // 626.4
+
+                const scrollMod = scroll % (_100vh * 5);
+                // 這邊乘以幾倍
+                // const left5 = Math.cos(scrollMod / 500 + 1.57) * 650;這一行就要除以多幾倍
+
+
+                // console.log(scrollMod);
+                // console.log(Math.cos(scrollMod));
+                // console.log(Math.sin(scrollMod));
+
+                // 圓一圈是 2PI = 2 * 3.1415926 = 6.2831852
+                // 而我的 _100vh 是 626.4
+                // 除以 100 看起來差不多
+
+                // 如果要完全精準就這樣
+                // 3132 / 5 / 6.28 = 99.74522
+                let left = Math.cos(scrollMod / 100) * 85;
+                let top = Math.sin(scrollMod / 100) * 85;
+
+                const leftStr1 = left + 'px';
+                const topStr1 = top + 'px';
+
+                $(".item1").css("left", leftStr1);
+                $(".item1").css("top", topStr1);
+
+                // 如果想要變扁
+                const top2 = top / 1.5;
+                // const top2 = top / 1;
+
+                // leftStr2 和 leftStr1 一樣 沒改
+                const leftStr2 = left + 'px';
+                const topStr2 = top2 + 'px';
+
+                $(".item2").css("left", leftStr2);
+                $(".item2").css("top", topStr2);
+
+                // 如果想要偏斜
+                // 要加上一個永遠在 0 到 1 之間的數字
+                // 這個值在 X 越靠近 1 或 -1 時要越大
+                // 最簡單的做法就是對 cos() 取絕對值
+                // Math.abs(Math.cos())
+                // 用下面這行會是蜜蜂切偶模式 先註解
+                // const skewConstant = Math.abs(Math.cos(scrollMod/100));
+
+                // 0.75 是土法煉鋼的值 試出來的
+                // top3 = -Math.sin() + Math.cos()
+                const top3 = (top - left) * 0.75;
+                // const top3 = (top - left) * 0.5;
+
+                // left = left * skewConstant;
+                // top = top * skewConstant;
+
+                const leftStr3 = left + "px";
+                const topStr3 = top3 + "px";
+
+                // console.log(top);
+
+                $(".item3").css("left", leftStr3);
+                $(".item3").css("top", topStr3);
+
+                // 所以如果希望用第三種模式動 但是扁一點的話
+                const top4 = (top - left) / 5;
+
+                // 用 console.log() 捲到最上面偷看 top4 的值
+                // 回去上面設定初始位置
+                // console.log(top4);
+
+                const leftStr4 = left + "px";
+                const topStr4 = top4 + "px";
+
+                $(".item4").css("left", leftStr4);
+                $(".item4").css("top", topStr4);
+
+                // 接下來要調整寬度試試看
+
+                // 因為這個盒子比較大 所以兩種座標重算
+                // 橫向半徑大概 180px
+
+                // 每張圖+的數字都不一樣，以1.57為倍數
+                const left5 = Math.cos(scrollMod / 500 + 1.57) * 650; //調旋轉多寬
+                // 
+                const top5 = Math.sin(scrollMod / 500 + 1.57) * 1200 / 5; //調旋轉多高
+
+                const leftStr5 = left5 + "px";
+                const topStr5 = top5 + "px";
+
+                // 這邊是設定滑多少旋轉多少，不調整縮放
+                $(".item5").css("left", leftStr5);
+                $(".item5").css("top", topStr5);
+                
+                // $(".item4").css("left", leftStr5);
+                // $(".item4").css("top", topStr5);
+
+                // 為了調整大小 要觀察 top 值的規律
+                // console.log('left5', left5);
+                // console.log('top5', top5);
+                // 在 top 值最大的時候 width 要最大
+                // 在 top 值變成負值的時候要變小 但不能變負
+                // 可以看到這個值在 -36 到 36 左右循環
+                // 除以 3 就是 -12 到 12 之間
+                // 如果中間值是 88 去相加就會在 76 到 100 間
+                
+
+                // 這邊才是調整縮放大小
+                const maleWidth = 88 + top5/20;  
+                //這邊是調旋轉後縮放的比例range多寬，數字越大，縮放比例越小
+                // console.log(maleWidth);
+                const maleWidthStr = maleWidth + '%'
+                $('.item5 img').css('width', maleWidthStr);
+
+                const maleWidth4 = 50 + top5/5; //這邊是調旋轉後縮放的比例range多寬
+                // console.log(maleWidth);
+                const maleWidthStr4 = maleWidth + '%'
+                $('.item4 img').css('width', maleWidthStr);
+
+                console.log(top5);
+
+            });
+
+            // 在外面先算好初始位置的值再傳進去，這樣reload的時候，值就會固定是從固定一個點開始
+            // 不會亂跳，這樣CSS那邊就可以不用設初始位置 
+
+        </script>
+    </body>
+</html>
